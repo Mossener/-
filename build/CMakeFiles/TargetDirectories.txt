@@ -1,0 +1,3 @@
+/home/yurika/opengl/build/CMakeFiles/opengl_demo.dir
+/home/yurika/opengl/build/CMakeFiles/edit_cache.dir
+/home/yurika/opengl/build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,4 @@
+# ninja log v5
+1	352	1766559390952819602	CMakeFiles/opengl_demo.dir/src/glad.c.o	ae87d7c9163b9fec
+1	471	1766559391071817913	CMakeFiles/opengl_demo.dir/src/main.cpp.o	a6923cef691e3e84
+471	528	1766559391128817107	opengl_demo	6cb245aee82764ba
