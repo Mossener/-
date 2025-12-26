@@ -36,6 +36,7 @@ unsigned int compileShader(GLenum type, const char* src) {
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 }
+
 int main() {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -90,7 +91,15 @@ int main() {
     glAttachShader(program, vs);
     glAttachShader(program, fs);
     glLinkProgram(program);
-    // 检查链接错误 (此处省略，实际项目中应加入)
+
+    // 检查链接错误
+    int success;
+    char infoLog[512];
+    glGetProgramiv(program, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(program, 512, nullptr, infoLog);
+        std::cerr << "着色器程序链接失败: " << infoLog << std::endl;
+    }
 
     glDeleteShader(vs);
     glDeleteShader(fs);
