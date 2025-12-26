@@ -29,7 +29,15 @@ unsigned int compileShader(GLenum type, const char* src) {
     unsigned int s = glCreateShader(type);
     glShaderSource(s, 1, &src, nullptr);
     glCompileShader(s);
-    // 检查编译错误 (此处省略，实际项目中应加入)
+
+    // 检查编译错误
+    int success;
+    char infoLog[512];
+    glGetShaderiv(s, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(s, 512, nullptr, infoLog);
+        std::cerr << "着色器编译失败: " << infoLog << std::endl;
+    }
     return s;
 }
 
@@ -57,15 +65,12 @@ int main() {
         return -1;
     }
 
-    // ====================================================================
-    // 新增：启用深度测试！
-    // 这样近的物体会遮挡远的物体，否则会看到奇怪的“透视”效果
+    // 启用深度测试
     glEnable(GL_DEPTH_TEST);   
-    // ====================================================================
 
     // 正方体的 36 个顶点数据 (每个面 2 个三角形，共 6 个面)
     float vertices[] = {
-        // ... (省略顶点数据)
+        // 这里填入正方体的顶点数据
     };
 
     unsigned int VAO, VBO;
@@ -76,7 +81,7 @@ int main() {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    // 顶点属性指针，现在是 3 个 float 为一个位置
+    // 顶点属性指针
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
@@ -104,39 +109,32 @@ int main() {
     glDeleteShader(vs);
     glDeleteShader(fs);
 
-    // 获取着色器中 uniform 变量的位置 (为了后面向它们传值)
+    // 获取着色器中 uniform 变量的位置
     unsigned int modelLoc = glGetUniformLocation(program, "model");
     unsigned int viewLoc = glGetUniformLocation(program, "view");
     unsigned int projLoc = glGetUniformLocation(program, "projection");
 
     while (!glfwWindowShouldClose(window)) {
-        // ====================================================================
-        // 新增：清空颜色缓冲和深度缓冲
+        // 清空颜色缓冲和深度缓冲
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // 清除深度缓冲
-        // ====================================================================
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glUseProgram(program);
 
-        // ====================================================================
         // 计算并传递矩阵
-        // 1. 模型矩阵 (Model Matrix)
-        glm::mat4 model = glm::mat4(1.0f); // 初始为单位矩阵
+        glm::mat4 model = glm::mat4(1.0f);
         model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-        // 2. 观察矩阵 (View Matrix)
         glm::mat4 view = glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f), 
                                      glm::vec3(0.0f, 0.0f, 0.0f), 
                                      glm::vec3(0.0f, 1.0f, 0.0f));
         glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
-        // 3. 投影矩阵 (Projection Matrix)
         glm::mat4 projection = glm::perspective(glm::radians(45.0f), 
                                                (float)800 / (float)600, 
                                                0.1f, 100.0f);
         glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-        // ====================================================================
 
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
