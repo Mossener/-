@@ -33,6 +33,9 @@ unsigned int compileShader(GLenum type, const char* src) {
     return s;
 }
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
+}
 int main() {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
