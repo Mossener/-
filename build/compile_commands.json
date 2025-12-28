@@ -1,14 +1,26 @@
 [
 {
   "directory": "/home/yurika/opengl/build",
-  "command": "/usr/bin/g++ -I/home/yurika/opengl/include -g -std=gnu++17 -o CMakeFiles/opengl_demo.dir/src/main.cpp.o -c /home/yurika/opengl/src/main.cpp",
+  "command": "/usr/bin/g++ -I/home/yurika/opengl/include -I/home/yurika/opengl/src -g -std=gnu++17 -o CMakeFiles/opengl_demo.dir/src/main.cpp.o -c /home/yurika/opengl/src/main.cpp",
   "file": "/home/yurika/opengl/src/main.cpp",
   "output": "CMakeFiles/opengl_demo.dir/src/main.cpp.o"
 },
 {
   "directory": "/home/yurika/opengl/build",
-  "command": "/usr/bin/gcc -I/home/yurika/opengl/include -g -o CMakeFiles/opengl_demo.dir/src/glad.c.o -c /home/yurika/opengl/src/glad.c",
+  "command": "/usr/bin/gcc -I/home/yurika/opengl/include -I/home/yurika/opengl/src -g -o CMakeFiles/opengl_demo.dir/src/glad.c.o -c /home/yurika/opengl/src/glad.c",
   "file": "/home/yurika/opengl/src/glad.c",
   "output": "CMakeFiles/opengl_demo.dir/src/glad.c.o"
+},
+{
+  "directory": "/home/yurika/opengl/build",
+  "command": "/usr/bin/g++ -I/home/yurika/opengl/include -I/home/yurika/opengl/src -g -std=gnu++17 -o CMakeFiles/opengl_demo.dir/src/SkinnedModel.cpp.o -c /home/yurika/opengl/src/SkinnedModel.cpp",
+  "file": "/home/yurika/opengl/src/SkinnedModel.cpp",
+  "output": "CMakeFiles/opengl_demo.dir/src/SkinnedModel.cpp.o"
+},
+{
+  "directory": "/home/yurika/opengl/build",
+  "command": "/usr/bin/g++ -I/home/yurika/opengl/include -I/home/yurika/opengl/src -g -std=gnu++17 -o CMakeFiles/opengl_demo.dir/src/SkeletonHandler.cpp.o -c /home/yurika/opengl/src/SkeletonHandler.cpp",
+  "file": "/home/yurika/opengl/src/SkeletonHandler.cpp",
+  "output": "CMakeFiles/opengl_demo.dir/src/SkeletonHandler.cpp.o"
 }
 ]

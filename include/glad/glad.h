@@ -5,7 +5,7 @@
     Language/Generator: C/C++
     Specification: gl
     APIs: gl=3.3
-    Profile: core
+    Profile: core    
     Extensions:
         GL_3DFX_multisample,
         GL_3DFX_tbuffer,
