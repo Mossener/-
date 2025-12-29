@@ -244,8 +244,12 @@ glm::vec3 lightPos(-2.0f, 15.0f, -1.0f);
 // 提取出的渲染函数：供 Pass 1 和 Pass 2 调用
 unsigned int lightCubeShader;
 
-void RenderAllObjects(unsigned int shaderID, SkinnedModel &kobeModel, SkeletonHandler &skel, float animAngle, int currentAction, float playerRot, std::vector<glm::mat4> &identityMatrices, unsigned int kobeTex, unsigned int boxTex, unsigned int bactTex, unsigned int endTex)
-{
+void RenderAllObjects(unsigned int shaderID, SkinnedModel &kobeModel, SkeletonHandler &skel, 
+                      float animAngle, int currentAction, float playerRot, 
+                      std::vector<glm::mat4> &identityMatrices, 
+                      unsigned int kobeTex, unsigned int boxTex, 
+                      unsigned int bactTex, unsigned int endTex, 
+                      unsigned int wallTex){
 
     // 获取 uniform 位置
     int isAnimLoc = glGetUniformLocation(shaderID, "isAnimated");
@@ -303,7 +307,7 @@ void RenderAllObjects(unsigned int shaderID, SkinnedModel &kobeModel, SkeletonHa
 
             if (tileType == 1)
             { // 墙
-                glBindTexture(GL_TEXTURE_2D, boxTex);
+                glBindTexture(GL_TEXTURE_2D, wallTex);
                 m = glm::translate(m, glm::vec3(0, 1.0f, 0));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(m));
                 RenderCube();
@@ -360,7 +364,7 @@ int main()
     unsigned int bactTex = loadTexture("bac.jpeg");
     unsigned int endTex = loadTexture("end.jpeg");
     unsigned int winTex = loadTexture("kobe_win.jpeg");
-
+    unsigned int wallTex = loadTexture("wall.jpeg");
     // 加载 Shader
     unsigned int mainShader = LoadYourShaders("shaders/skinned_vshader.glsl", "shaders/fshader.glsl");
     unsigned int depthShader = LoadYourShaders("shaders/depth_v.glsl", "shaders/depth_f.glsl");
@@ -481,7 +485,7 @@ int main()
                     hasPlayedSound = false;
                 }
                 else
-                {
+                {  
                     isAnimating = false;
                     animAngle = 0.0f;
                     hasPlayedSound = false;
@@ -533,7 +537,7 @@ int main()
         glClear(GL_DEPTH_BUFFER_BIT);
         glUseProgram(depthShader);
         glUniformMatrix4fv(glGetUniformLocation(depthShader, "lightSpaceMatrix"), 1, GL_FALSE, glm::value_ptr(lightSpaceMatrix));
-        RenderAllObjects(depthShader, kobeModel, skeletonHandler, animAngle, currentAction, playerRot, identityMatrices, 0, 0, 0, 0);
+        RenderAllObjects(depthShader, kobeModel, skeletonHandler, animAngle, currentAction, playerRot, identityMatrices, 0, 0, 0, 0,0);
 
         // --- 5. PASS 2: 最终渲染 ---
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -553,7 +557,7 @@ int main()
         glUniform1i(glGetUniformLocation(mainShader, "shadowMap"), 1);
         glUniform1i(glGetUniformLocation(mainShader, "texture1"), 0);
 
-        RenderAllObjects(mainShader, kobeModel, skeletonHandler, animAngle, currentAction, playerRot, identityMatrices, kobeTex, boxTex, bactTex, endTex);
+        RenderAllObjects(mainShader, kobeModel, skeletonHandler, animAngle, currentAction, playerRot, identityMatrices, kobeTex, boxTex, bactTex, endTex,wallTex);
 
         // --- 6. 辅助渲染 (灯光方块与 UI) ---
         glUseProgram(lightCubeShader);
@@ -565,15 +569,7 @@ int main()
         RenderCube();
 
         // 胜利 UI 特效
-        if (currentStatus == WIN_ANIMATING && winTimer > 1.5f)
-        {
-            glDisable(GL_DEPTH_TEST);
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, winTex);
-            // 使用简单的渲染逻辑绘制全屏胜利图
-            RenderQuad();
-            glEnable(GL_DEPTH_TEST);
-        }
+        
 
         glfwSwapBuffers(window);
         glfwPollEvents();
